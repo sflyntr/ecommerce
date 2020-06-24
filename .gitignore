@@ -1,5 +1,0 @@
-./bin
-./lib
-./pyvenv.cfg
-./src/db.sqlite3
-./src/ecommerce/__pycache__
