@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 
-from .forms import ContactForm, LoginForm
+from .forms import ContactForm, LoginForm, RegisterForm
 
 def home_page(request):
     context = {
@@ -32,7 +32,7 @@ def contact_page(request):
 def login_page(request):
     form = LoginForm(request.POST or None)
     context = {
-        "form": form
+        "form": form,
     }
     print('User Logged In')
     print(request.user.is_authenticated())
@@ -47,14 +47,27 @@ def login_page(request):
             login(request, user)
             # Redirect to a success page
             # context['form'] = LoginForm()
-            return redirect("/login")
+            return redirect("/")
         else:
             print("Login Error")
     return render(request, "auth/login.html", context)
 
 
+User = get_user_model()
 def register_page(request):
-    return render(request, "auth/register.html", {})
+    form = RegisterForm(request.POST or None)
+    context = {
+        "form": form,
+    }
+
+    if form.is_valid():
+        username = form.cleaned_data.get("username")
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        new_user = User.objects.create_user(username, email, password)
+        print(new_user)
+
+    return render(request, "auth/register.html", context)
 
 
 def about_page(request):
