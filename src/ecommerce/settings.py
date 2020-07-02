@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# 현재 settings.py 화일이 있는 위치의 dir 그리고 그 dir이 존재하는 dir이 BASE_DIR 이 된다.
+# 즉, src/ecommerce/settings.py 이므로, src 디렉토리가 BASE_DIR 이 된다.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # our apps
+    'products',
 ]
 
 MIDDLEWARE = [
@@ -118,3 +123,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# src/commerce와 같은 레벨로 src/static_my_proj에 STATICFILES_DIRS를 둔다. 즉 프로젝트 내에 관리하겠다는 것이다.
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static_my_proj"),
+]
+
+# BASE_DIR인 src디렉토리가 존재하는 디렉토리이니, ecommerce가 된다.
+# 즉 BASE_DIR 내가 아니라 동일한 위치에 static_cdn을 만드는것이다. 즉 프로젝트 외부에 그런 화일들이 있다는 뜻이다.
+# 요게 실제 화일들이라는 의미이다.
+# 그리고, python manage.py collectstatic command를 수행하면,
+# 장고lib.contrib.admin쪽에 있는 static화일들이 static_cdn/static_root로 copy된다.
+# 또한, STATICFILES_DIRS에 정의된 static화일들도 통째로 static_cdn/static_root로 copy된다.
+# 요약하자면, STATIC_ROOT는 copy가 되는 외부 cdn target 위치이며,
+# STATICFILES_DIRS 는 프로젝트내에서 관리하는 static file 들의 위치이다, 물론 django admin은 기본으로 copy 된다.(장고 어드민을 사용해야 하니)
+# 즉 추후 production에 배포할때 프로젝트 외부의 cdn화일들 잘 관리하라고 collectstatic 명령어를 만들어 준것이다.
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root")
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
