@@ -32,6 +32,9 @@ def product_list_view(request):
 
 
 class ProductDetailView(DetailView):
+    # get_object_or_404 안해도 DetailView나온다.즉, 어떤모델의 queryset을 사용하는지만 지정해도 된다.
+    # 그리고 queryset 이름도 지정된거 써야한다. queryset = 말고 qs = 이런식으로 하면 안된다.
+    # 즉, queryset이라는 변수에 반드시 model queryset을 지정해줘야 parent에서 그걸 참조한 함수들을 사용할 수 있다.
     queryset = Product.objects.all()
     # 참고로 Class based view 에서 default view 이름은 product(모델명소문자)_list.html이다.
     # 따라서 template_name = "products/list.html" 로 하고 아무것도 안만들면,
