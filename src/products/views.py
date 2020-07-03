@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 # 이렇게 해도 된다. generic에 init.py에 shortcut이 있으므로,
@@ -51,7 +52,26 @@ class ProductDetailView(DetailView):
 
 def product_detail_view(request, pk=None, *args, **kwargs):
     # instance = Product.objects.get(pk=pk)
-    instance = get_object_or_404(Product, pk=pk)
+
+    # 아래도 동일한 기능을 수행한다.
+    # instance = get_object_or_404(Product, pk=pk)
+
+    # 이것도 동일한 기능을 수행한다.
+    # try:
+    #     instance = Product.objects.get(id=pk)
+    # except Product.DoesNotExists:
+    #     print('no product here')
+    # except:
+    #     print("huh?")
+
+    qs = Product.objects.filter(id=pk)
+
+    if qs.exists() and qs.count() == 1:
+        instance = qs.first()
+    else:
+        raise Http404("Product doesn't exist")
+
+
     context = {
         'object': instance
     }
