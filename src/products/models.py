@@ -71,6 +71,10 @@ class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는
     # (물론 기존 models.Manager를 상속받은 것이니 기존 기능 다 사용가능하다.)
     objects = ProductManager()
 
+    # for reverse. -> html에서 사용될 것임.
+    def get_absolute_url(self):
+        return "/products/{slug}/".format(slug=self.slug)
+
     def __str__(self):  # python3
         return self.title
 
