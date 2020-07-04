@@ -2,7 +2,9 @@ import random
 import os
 
 from django.db import models
+from django.db.models.signals import pre_save, post_save
 
+from .utils import unique_slug_generator
 
 def get_filename_ext(filepath):
     base_name = os.path.basename(filepath)
@@ -56,6 +58,7 @@ class ProductManager(models.Manager):
 # Create your models here.
 class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는것이 Convention임. 즉 Products 이렇게 하지 않는다.
     title = models.CharField(max_length=120)
+    slug = models.SlugField(blank=True, unique=True)
     description = models.TextField()
     price = models.DecimalField(decimal_places=2, max_digits=20, default=39.99) # 또는 null=True로 해도 됨.
     image = models.ImageField(upload_to=upload_image_path, null=True, blank=True)
@@ -74,3 +77,10 @@ class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는
     def __unicode__(self):  # this is 하위호환성. python2에서는 이렇게 사용해야함.
         return self.title
 
+
+def product_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        # instance.slug = 'abc'
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(product_pre_save_receiver, sender=Product)

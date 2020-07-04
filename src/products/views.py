@@ -79,6 +79,28 @@ class ProductDetailView_queryset_override(DetailView):
         pk = self.kwargs.get('pk')
         return Product.objects.filter(pk=pk)
 
+
+class ProductDetailSlugView(DetailView):
+    queryset = Product.objects.all()
+    template_name = "products/detail.html"
+
+    def get_object(self, *args, **kwargs):
+        request = self.request
+        slug = self.kwargs.get('slug')
+        # instance = get_object_or_404(Product, slug=slug, active=True)
+        try:
+            instance = Product.objects.get(slug=slug, active=True)
+        except Product.DoesNotExist:
+            raise Http404("Not found...")
+        except Product.MultipleObjectsReturned:
+            qs = Product.objects.filter(slug=slug, active=True)
+            instance = qs.first()
+        except:
+            raise Http404("Hummmmm.")
+
+        return instance
+
+
 class ProductDetailView(DetailView):
     # get_object_or_404 안해도 DetailView나온다.즉, 어떤모델의 queryset을 사용하는지만 지정해도 된다.
     # 그리고 queryset 이름도 지정된거 써야한다. queryset = 말고 qs = 이런식으로 하면 안된다.
