@@ -21,7 +21,28 @@ def upload_image_path(instance, filename):
     return "products/{new_filename}/{final_filename}".format(new_filename=new_filename, final_filename=final_filename)
 
 
+class ProductQuerySet(models.query.QuerySet):
+    def featured(self):
+        # self는 QuerySet이므로 filter를 바로 self에 쓸수 있다.
+        return self.filter(featured=True, active=True)
+
+    def active(self):
+        return self.filter(active=True)
+
 class ProductManager(models.Manager):
+    # 위에서 만든 CustomQuerySet을 ProductManager에서 사용하게 해야 한다.
+    def get_queryset(self):
+        return ProductQuerySet(self.model, using=self._db)
+
+    def all(self):
+        return self.get_queryset().active()
+
+    def features(self): # Product.objects.features()
+        return self.get_queryset().featured()
+
+    def featured(self): # Product.objects.featured()
+        return self.get_queryset().filter(featured=True, active=True)
+
     # ModelManager의 get_by_id를 override함.
     # Product.objects.all() 여기서 Product.objects는 ModelManager임.
     # 필요하다면 all() 도 재정의 할수 있음.
@@ -38,6 +59,8 @@ class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는
     description = models.TextField()
     price = models.DecimalField(decimal_places=2, max_digits=20, default=39.99) # 또는 null=True로 해도 됨.
     image = models.ImageField(upload_to=upload_image_path, null=True, blank=True)
+    featured = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
 
     # 요거는 override는 아니고 그냥 extending이라고 얘기하는데..
     # 내 생각엔 변수를 덮어쓴거라 override랑 비슷한거 같다.

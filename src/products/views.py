@@ -8,6 +8,23 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product
 
 
+class ProductFeaturedListView(ListView):
+    template_name = "products/list.html"
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        return Product.objects.all().featured()
+
+
+class ProductFeaturedDetailView(DetailView):
+    # 아래와 같이 objects 하면 ModelManager가 나오고 all()을 하면 QuerySet이 나온다.
+    # 그 QuerySet에는 featured 속성 없다고 나온다.
+    # 즉, 우리는 ProductManager라는 Custome을 사용한 것 처럼
+    # CustomerQuerySet을 만들어서 사용해야 한다.
+    queryset = Product.objects.all().featured()
+    template_name = "products/featured-detail.html"
+
+
 # Create your views here.
 class ProductListView(ListView):
     queryset = Product.objects.all()
@@ -101,10 +118,10 @@ def product_detail_view(request, pk=None, *args, **kwargs):
         raise Http404("Product doesn't exists")
 
 def product_detail_view_old(request, pk=None, *args, **kwargs):
-    # instance = Product.objects.get(pk=pk)
+    # instance = Product.objects.get(pk=pk, featured=True)
 
     # 아래도 동일한 기능을 수행한다.
-    # instance = get_object_or_404(Product, pk=pk)
+    # instance = get_object_or_404(Product, pk=pk, featured=True)
 
     # 이것도 동일한 기능을 수행한다.
     # try:

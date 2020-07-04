@@ -1,8 +1,10 @@
 {{ object.title }} <br/>
 {{ object.description }} <br/>
-{{ object.image.url }} <br/>
 
-<img src="{{ object.image.url }}" class="img-fluid" />
+{% if object.image %}
+    <img src='{{ object.image.url }}' class="img-fluid" />
+{% endif %}
+
 
 <!--{{ product.title }} <br/>-->
 <!--{{ product.description}} <br/>-->
