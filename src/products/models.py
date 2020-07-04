@@ -21,6 +21,17 @@ def upload_image_path(instance, filename):
     return "products/{new_filename}/{final_filename}".format(new_filename=new_filename, final_filename=final_filename)
 
 
+class ProductManager(models.Manager):
+    # ModelManager의 get_by_id를 override함.
+    # Product.objects.all() 여기서 Product.objects는 ModelManager임.
+    # 필요하다면 all() 도 재정의 할수 있음.
+    def get_by_id(self, id):
+        qs = self.get_queryset().filter(id=id)
+        if qs.count() == 1:
+            return qs.first()
+        return None
+
+
 # Create your models here.
 class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는것이 Convention임. 즉 Products 이렇게 하지 않는다.
     title = models.CharField(max_length=120)
