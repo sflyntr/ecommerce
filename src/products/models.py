@@ -39,6 +39,12 @@ class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는
     price = models.DecimalField(decimal_places=2, max_digits=20, default=39.99) # 또는 null=True로 해도 됨.
     image = models.ImageField(upload_to=upload_image_path, null=True, blank=True)
 
+    # 요거는 override는 아니고 그냥 extending이라고 얘기하는데..
+    # 내 생각엔 변수를 덮어쓴거라 override랑 비슷한거 같다.
+    # 따라서 기존에 Product.objects 하면 models.Manager가 나오는데, 이렇게 하면 ProductManager가 나온다.
+    # (물론 기존 models.Manager를 상속받은 것이니 기존 기능 다 사용가능하다.)
+    objects = ProductManager()
+
     def __str__(self):  # python3
         return self.title
 

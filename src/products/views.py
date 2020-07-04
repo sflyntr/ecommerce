@@ -22,6 +22,14 @@ class ProductListView(ListView):
     #     print(context)
     #     return context
 
+class ProductListView_queryset_override(ListView):
+    # queryset = Product.objects.all()
+    template_name = "products/list.html"
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        pk = self.kwargs.get('pk')
+        return Product.objects.filter(pk=pk)
 
 
 def product_list_view(request):
@@ -31,6 +39,28 @@ def product_list_view(request):
     }
     return render(request, "products/list.html", context)
 
+class ProductDetailView_queryset_override(DetailView):
+    # queryset = Product.objects.all()
+    template_name = "products/detail.html"
+    hello_words = "Hello, World welcome to django world."
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(*args, **kwargs)
+        print(context)
+        return context
+
+    # def get_object(self, *args, **kwargs):
+    #     request = self.request
+    #     pk = self.kwargs.get('pk')
+    #     instance = Product.objects.get_by_id(pk)
+    #     if instance is None:
+    #         raise Http404("Product dosen't exist.....")
+    #     return instance
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        pk = self.kwargs.get('pk')
+        return Product.objects.filter(pk=pk)
 
 class ProductDetailView(DetailView):
     # get_object_or_404 안해도 DetailView나온다.즉, 어떤모델의 queryset을 사용하는지만 지정해도 된다.
@@ -50,7 +80,27 @@ class ProductDetailView(DetailView):
         return context
 
 
+    # DetailView를 상속받음.
+    # class DetailView(SingleObjectTemplateResponseMixin, BaseDetailView) <- BaseDetailView를 상속받음.
+    # class BaseDetailView(SingleObjectMixin, View) <- SingleObjectMixin을 상속받음.
+    # class SingleObjectMixin(ContextMixin) <- 여기에 get_object, get_context_data 등 정의되어 있음.
+    # 이것을 재정의 하는 것임.
+
+    def get_object(self, *args, **kwargs):
+        request = self.request
+        pk = self.kwargs.get('pk')
+        instance = Product.objects.get_by_id(pk)
+        if instance is None:
+            raise Http404("Product dosen't exist")
+        return instance
+
+
 def product_detail_view(request, pk=None, *args, **kwargs):
+    instance = Product.objects.get_by_id(pk)
+    if instance is None:
+        raise Http404("Product doesn't exists")
+
+def product_detail_view_old(request, pk=None, *args, **kwargs):
     # instance = Product.objects.get(pk=pk)
 
     # 아래도 동일한 기능을 수행한다.
