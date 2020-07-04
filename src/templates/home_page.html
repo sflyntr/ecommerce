@@ -1,19 +1,12 @@
+{% extends "base.html" %}
 {% load static %}
-<!--load static을 하게 되면 기본적으로 settings.py에 등록되어 있는 STATICFILES_DIRS 인 static_my_proj아래 있는 정보들을 로드한다.-->
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <!-- 위 load static 한 경로 기준으로 css/main.css를 참조하라는 뜻이다.-->
-    <link rel="stylesheet" href='{% static "css/main.css" %}'
+{% block base_head %}
+<!-- 위 load static 한 경로 기준 또는 extends한 base.html에 있는 load static 기준으로 css/main.css를 참조하라는 뜻이다.-->
+<link rel="stylesheet" href='{% static "css/main.css" %}'/>
+{% endblock %}
 
- </head>
-  <body>
+{% block content %}
     <div class='text-center'>
         <h1>{{ title }}</h1>
         <h1>Hello, World! We're working.</h1>
@@ -25,12 +18,13 @@
                 <p>{{ content }}</p>
             </div>
         </div>
+        {% if request.user.is_authenticated %}
+        <div class="row">
+            <div class="col">
+                <h1>Premium</h1>
+                {{ premium_content }}
+            </div>
+        </div>
+        {% endif %}
     </div>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-  </body>
-</html>
+{% endblock %}

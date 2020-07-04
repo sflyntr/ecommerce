@@ -1,13 +1,23 @@
-{{ object.title }} <br/>
-{{ object.description }} <br/>
+{% extends "base.html" %}
 
-{% if object.image %}
-    <img src='{{ object.image.url }}' class="img-fluid" />
-{% endif %}
+{% block content %}
 
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>{{ object.title }}</h1>
+            {{ object.timestamp|timesince }} ago
+            {{ object.description|linebreaks }} <br/>
+            {% if object.image %}
+                <img src='{{ object.image.url }}' class="img-fluid" />
+            {% endif %}
+        </div>
+    </div>
+</div>
 
-<!--{{ product.title }} <br/>-->
-<!--{{ product.description}} <br/>-->
+{% endblock %}
 
+could this be shown?
+No, this cannot be shown.
 
-<!--{{ view.hello_words }} <br/>-->
+<h1>How about this outside block?</h1>

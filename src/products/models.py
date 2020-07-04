@@ -3,6 +3,7 @@ import os
 
 from django.db import models
 from django.db.models.signals import pre_save, post_save
+from django.shortcuts import reverse
 
 from .utils import unique_slug_generator
 
@@ -64,6 +65,7 @@ class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는
     image = models.ImageField(upload_to=upload_image_path, null=True, blank=True)
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     # 요거는 override는 아니고 그냥 extending이라고 얘기하는데..
     # 내 생각엔 변수를 덮어쓴거라 override랑 비슷한거 같다.
@@ -73,7 +75,8 @@ class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는
 
     # for reverse. -> html에서 사용될 것임.
     def get_absolute_url(self):
-        return "/products/{slug}/".format(slug=self.slug)
+        # return "/products/{slug}/".format(slug=self.slug)
+        return reverse("products:detail", kwargs={"slug": self.slug})
 
     def __str__(self):  # python3
         return self.title
