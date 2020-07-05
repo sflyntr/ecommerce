@@ -27,7 +27,7 @@ class ProductFeaturedDetailView(DetailView):
 
 # Create your views here.
 class ProductListView(ListView):
-    queryset = Product.objects.all()
+    # queryset = Product.objects.all()
     # 참고로 Class based view 에서 default view 이름은 product(모델명소문자)_list.html이다.
     # 따라서 template_name = "products/list.html" 로 하고 아무것도 안만들면,
     # product_list.html, list.html 2개의 template이 없다는 에러가 나온다. (Tip!!)
@@ -38,6 +38,10 @@ class ProductListView(ListView):
     #     context = super(ProductListView, self).get_context_data(*args, **kwargs)
     #     print(context)
     #     return context
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        return Product.objects.all()
 
 class ProductListView_queryset_override(ListView):
     # queryset = Product.objects.all()
