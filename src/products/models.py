@@ -3,10 +3,10 @@ import os
 
 from django.db.models import Q
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save
 from django.shortcuts import reverse
 
-from .utils import unique_slug_generator
+from ecommerce.utils import unique_slug_generator
 
 def get_filename_ext(filepath):
     base_name = os.path.basename(filepath)
@@ -95,6 +95,10 @@ class Product(models.Model): # CamelCase로 작성하며, 단수로 처리하는
         return self.title
 
     def __unicode__(self):  # this is 하위호환성. python2에서는 이렇게 사용해야함.
+        return self.title
+
+    @property
+    def name(self):
         return self.title
 
 

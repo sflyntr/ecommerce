@@ -41,10 +41,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # our apps
+    'accounts',
+    'addresses',
+    'billing',
+    'carts',
     'products',
+    'orders',
     'search',
     'tags',
 ]
+
+AUTH_USER_MODEL = 'accounts.User' #changes the built-in user model to ours
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,6 +64,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
+LOGOUT_REDIRECT_URL = '/login/'
 
 TEMPLATES = [
     {

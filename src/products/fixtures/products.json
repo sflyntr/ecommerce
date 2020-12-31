@@ -1,0 +1,100 @@
+[
+{
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+        "title": "T-shirts",
+        "slug": "abc",
+        "description": "This is awesome T-shirts. buy it :)",
+        "price": "39.99",
+        "image": "products/197423047903/197423047903.jpeg",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-07-04T17:21:32.290Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+        "title": "Hat",
+        "slug": "hat",
+        "description": "This is awesome hat! buy it :)",
+        "price": "39.99",
+        "image": "products/306840896863/306840896863.jpeg",
+        "featured": true,
+        "active": true,
+        "timestamp": "2020-07-04T17:21:32.290Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+        "title": "supercomputer",
+        "slug": "supercomputer",
+        "description": "Yahhh...",
+        "price": "1000.00",
+        "image": "",
+        "featured": true,
+        "active": true,
+        "timestamp": "2020-07-04T17:21:32.290Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+        "title": "T-shirts",
+        "slug": "t-shirts",
+        "description": "another T-shirts. awesome!",
+        "price": "39.99",
+        "image": "",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-07-04T17:21:32.290Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 5,
+    "fields": {
+        "title": "Lorem ipsum",
+        "slug": "lorem-ipsum",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Libero justo laoreet sit amet cursus sit amet dictum sit. Dui nunc mattis enim ut tellus elementum. Volutpat ac tincidunt vitae semper quis lectus nulla. Nulla pharetra diam sit amet nisl suscipit adipiscing. Eget duis at tellus at urna. Nulla facilisi etiam dignissim diam quis enim lobortis. Est sit amet facilisis magna etiam tempor. Imperdiet proin fermentum leo vel orci porta. Fermentum dui faucibus in ornare. Maecenas pharetra convallis posuere morbi. Aenean sed adipiscing diam donec adipiscing tristique. Ultricies leo integer malesuada nunc vel.\r\n\r\nIn ornare quam viverra orci sagittis eu volutpat odio facilisis. Praesent tristique magna sit amet purus gravida quis blandit turpis. Mauris in aliquam sem fringilla ut morbi. Odio euismod lacinia at quis risus sed. Pellentesque elit ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Nascetur ridiculus mus mauris vitae. Ultrices mi tempus imperdiet nulla malesuada pellentesque. Eget mauris pharetra et ultrices neque ornare aenean. Elementum tempus egestas sed sed risus pretium quam. Tellus mauris a diam maecenas sed enim ut sem. Orci sagittis eu volutpat odio facilisis. Mauris vitae ultricies leo integer malesuada. Pharetra convallis posuere morbi leo urna molestie at elementum eu. Eu volutpat odio facilisis mauris sit amet massa. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Pellentesque habitant morbi tristique senectus.\r\n\r\nLectus sit amet est placerat in egestas erat imperdiet sed. Egestas erat imperdiet sed euismod nisi. Faucibus in ornare quam viverra orci sagittis eu. Sapien et ligula ullamcorper malesuada proin. Dignissim diam quis enim lobortis. Eget dolor morbi non arcu risus quis varius quam quisque. Potenti nullam ac tortor vitae purus faucibus ornare. Lacus vel facilisis volutpat est. Tellus rutrum tellus pellentesque eu. Platea dictumst vestibulum rhoncus est pellentesque.\r\n\r\nMontes nascetur ridiculus mus mauris vitae ultricies leo. Elementum integer enim neque volutpat ac tincidunt. Lacus sed viverra tellus in. Ut aliquam purus sit amet. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. Vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Non quam lacus suspendisse faucibus. Sit amet consectetur adipiscing elit pellentesque. Amet mattis vulputate enim nulla aliquet porttitor lacus luctus. At imperdiet dui accumsan sit amet nulla facilisi morbi tempus. Suspendisse sed nisi lacus sed viverra tellus in hac habitasse. Non odio euismod lacinia at quis risus sed vulputate odio. Sem fringilla ut morbi tincidunt augue interdum velit euismod. Non sodales neque sodales ut etiam sit amet nisl purus.\r\n\r\nId ornare arcu odio ut sem. Dignissim diam quis enim lobortis. Adipiscing elit ut aliquam purus sit. Arcu vitae elementum curabitur vitae nunc sed velit dignissim. In fermentum et sollicitudin ac. Donec et odio pellentesque diam volutpat commodo sed egestas egestas. Tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi. Gravida quis blandit turpis cursus in hac habitasse platea. Imperdiet proin fermentum leo vel orci porta. Consequat semper viverra nam libero justo. Blandit cursus risus at ultrices mi tempus imperdiet nulla malesuada. Nulla malesuada pellentesque elit eget gravida cum.",
+        "price": "39.99",
+        "image": "",
+        "featured": true,
+        "active": true,
+        "timestamp": "2020-07-04T17:21:32.290Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 6,
+    "fields": {
+        "title": "SmartPhone",
+        "slug": "smartphone",
+        "description": "Good Smart Phone.",
+        "price": "200.00",
+        "image": "",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-07-04T17:48:28.949Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 7,
+    "fields": {
+        "title": "Red Hat",
+        "slug": "red-hat",
+        "description": "This is red hat",
+        "price": "39.99",
+        "image": "",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-07-05T15:30:16.514Z"
+    }
+}
+]

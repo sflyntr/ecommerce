@@ -1,0 +1,43 @@
+ - stripe docs : https://stripe.com/docs
+ - sflyntr@gmail.com
+
+ - stripe 설치
+ pip install stripe
+
+ - stripe keys (dashboard에서 확인가능함.)
+ publishable key: pk_test_51HputmGYYMq5YiSWF1KdXYFZuNIgziD9NS6Vxjx3gK6bAGwXukemgwe7iTH7Bqv7NNC2iZO3HaXE70wkq9XX1JnA00hvSlOlSD
+ secret key: xxx
+
+ - BillingProfile
+    email이 가장 중요한 필드이다.
+
+    user        = models.OneToOneField(User, null=True, blank=True)
+    email       = models.EmailField()
+    active      = models.BooleanField(default=True)
+    update      = models.DateTimeField(auto_now=True)
+    timestamp   = models.DateTimeField(auto_now_add=True)
+
+- BillingProfileManager
+  new_or_get 등 항상 request를 input으로 받는다.
+  거기서 request.user 를 가져와서 그게 authenticated라면 곧바로,
+  그 user정보에서 BillingProfile객체를 생성 또는 가져온다.
+  만약, authenticated user가 아니면, 반드시 guest_email_id가 있어야 한다.
+  있다면 GuestEmail객체를 가져온후 거기에 있는 email을 가지고 빌링프로파일 객체를 만들거나 가지고 온다.
+
+  항상 비회원, 즉 authenticated 되지 않는 고객도 생각해서 만들어야 한다.
+
+  그리고 그렇게 나온 obj 와 created를 return 한다.
+
+- stripe
+# stripe.Customer.create 를 호출하여 stripe에 customer를 create한다.
+# create할때 뭐 임시로 할수도 있고, 내가 식별할수 있는 뭔가 정보를 넣어서 create를 할수도 있다.
+# 여튼 create를 하면 가장 중요한 customer_id를 return받는다.
+
+위에 그 stripe의 customer_id를 billingprofile에 연결시키면 된다.
+
+
+- 결제창을 만들어 본다.
+- https://stripe.com/docs/stripe-js 여기를 참고하면된다.
+- 항상 그렇지만 document를 찾는 것이 가장 어렵다.
+- building with stripe 에서 stripe's UI library로 가면 된다. 그 안에서 "Stripe Elements" 를 찾으면 된다.
+- 

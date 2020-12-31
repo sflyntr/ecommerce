@@ -9,7 +9,7 @@
 {% block content %}
     <div class='text-center'>
         <h1>{{ title }}</h1>
-        <h1>Hello, World! We're working.</h1>
+        <h5>cart_id: {{ request.session.cart_id }}, user: {{ request.user }}</h5>
     </div>
     <div class="row">
         <div class="col">
