@@ -4,6 +4,7 @@ from .models import Cart
 from accounts.models import GuestEmail
 from accounts.forms import LoginForm, GuestForm
 from addresses.forms import AddressForm
+from addresses.models import Address
 from billing.models import BillingProfile
 from orders.models import Order
 from products.models import Product
@@ -90,60 +91,23 @@ def checkout_home(request):
     login_form = LoginForm()
     guest_form = GuestForm()
     address_form = AddressForm()
-    billing_address_form = AddressForm()
     guest_email_id = request.session.get('guest_email_id')
     print("guest_email_id:{}".format(guest_email_id))
+    billing_address_id = request.session.get("billing_address_id", None)
+    shipping_address_id = request.session.get("shipping_address_id", None)
 
-    # checkout.html에선 billing_profile 존재여부로 분기처리한다.
-    # 즉, billing_profile이 존재한다는 뜻은, cart가 있고, cart에 products가 1개이상 있으며, 그 cart로 order가 생성과고, user가 인증되었다는 뜻이다.
-    if user.is_authenticated():
-        billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(user=user, email=user.email)
-    elif guest_email_id is not None:
-        guest_email_obj = GuestEmail.objects.get(id=guest_email_id)
-        billing_profile, billing_guest_profile_created = BillingProfile.objects.get_or_create(email=guest_email_obj.email)
-    else:
-        pass
-
-    # 위에서 billing profile을 만들었다. 그리고 order객체를 생성하는데 billing_profile과 같이 만든다.
-    # 즉, 없겠지만, 해당 cart_obj로 order객체를 검색해서 있으면 active=False로 설정한다.
-    # 없다면 해당 cart_obj와 billing_profile로 order객체를 하나 만든다.
-    # 아래는 하지만 로직에 문제가 있다. 체크아웃에서 리프레시를 하면 order가 계속 바뀐다.
-    # if billing_profile is not None:
-    #     order_qs = Order.objects.filter(cart=cart_obj, active=True)
-    #     if order_qs.exists():
-    #         # update 이거 save대신 쓴건데... 좋은지 모르겠다.
-    #         print("Waring1 update -{}".format(order_qs.first()))
-    #         order_qs.update(active=False)
-    #         print("Waring2 update -{}".format(order_qs.first()))
-    #         # 아래와 같이 찍힌다. 이것은. order_qs에 있다가, active를 False로 바꾸니 order_qs first가 None으로 나온것이다.
-    #         # 즉, order_qs는 active=True 조건이 붙어 있는 쿼리셋이다. 이게 바뀌면 당연히 데이터가 안나온다.
-    #         # Waring1 - rimzvk48hu
-    #         # Waring2 - None
-    #         # 아래 save와 같은 결과이다. save는 개별instance에 저장하는 것이고,
-    #         # update는 한번에 하는 것인데, order_qs 쿼리셋의 결과는 동일하다.
-    #
-    #         # print("Waring1 save -{}".format(order_qs.first()))
-    #         # order_qs.active=False
-    #         # for instance in order_qs:
-    #         #     instance.active=False
-    #         #     instance.save()
-    #         # print("Waring2 save -{}".format(order_qs.first()))
-    #
-    #     else:
-    #         order_obj = Order.objects.create(
-    #             billing_profile = billing_profile,
-    #             cart=cart_obj
-    #         )
+    billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)
 
     if billing_profile is not None:
-        order_qs = Order.objects.filter(billing_profile=billing_profile, cart=cart_obj, active=True)
-        if order_qs.count() == 1:
-            order_obj = order_qs.first()
-        else:
-            old_order_qs = Order.objects.exclude(billing_profile=billing_profile).filter(cart=cart_obj, active=True)
-            if old_order_qs.exists():
-                old_order_qs.update(active=False)
-            order_obj = Order.objects.create(billing_profile=billing_profile, cart=cart_obj)
+        order_obj, order_obj_created = Order.objects.new_or_get(billing_profile, cart_obj)
+        if shipping_address_id:
+            order_obj.shipping_address = Address.objects.get(id=shipping_address_id)
+            del request.session['shipping_address_id']
+        if billing_address_id:
+            order_obj.billing_address = Address.objects.get(id=billing_address_id)
+            del request.session['billing_address_id']
+        if billing_address_id or shipping_address_id:
+            order_obj.save()
 
     context = {
         "object": order_obj,
@@ -151,7 +115,6 @@ def checkout_home(request):
         "login_form": login_form,
         "guest_form": guest_form,
         "address_form": address_form,
-        "billing_address_form": billing_address_form,
     }
 
     return render(request, "carts/checkout.html", context)
