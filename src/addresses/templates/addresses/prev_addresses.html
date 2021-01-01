@@ -1,0 +1,17 @@
+{% if address_qs.exists %}
+
+<div class="col-6">
+  <form method="post" action="?">
+    {% for address in address_qs %}
+
+    <label for='address-{{ addrerss.id }}'>
+      <input id='address-{{ addrerss.id }}' type="radio" name="shipping_address" value="{{ address.id }}" />
+      {{ address.address_line_1 }}
+    </label><br/>
+
+    {% endfor %}
+    <button type="submit" class="btn btn-success">Use Address</button>
+  </form>
+</div>
+
+{% endif %}
