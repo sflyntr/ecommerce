@@ -38,7 +38,7 @@ from carts.views import cart_home
 
 from .views import home_page, about_page, contact_page
 from accounts.views import login_page, register_page, guest_register_view, guest_login_view
-from addresses.views import checkout_address_create_view
+from addresses.views import checkout_address_create_view, checkout_address_reuse_view
 from billing.views import payment_method_view, payment_method_createview
 
 urlpatterns = [
@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^contact/', contact_page, name='contact'),
     url(r'^login/', login_page, name='login'),
     url(r'^checkout/address/create/$', checkout_address_create_view, name='checkout_address_create'),
+    url(r'^checkout/address/reuse/$', checkout_address_reuse_view, name='checkout_address_reuse'),
     url(r'^logout/', LogoutView.as_view(), name='logout'),
     url(r'^billing/payment-method/$', payment_method_view, name='billing-payment-method'),
     url(r'^billing/payment-method/create/$', payment_method_createview, name='billing-payment-method-endpoint'),

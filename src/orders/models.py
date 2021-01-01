@@ -69,6 +69,23 @@ class Order(models.Model):
         self.save()
         return new_total
 
+    def check_done(self):
+        billing_profile = self.billing_profile
+        shipping_address = self.shipping_address
+        billing_address = self.billing_address
+        total = self.total
+        if billing_profile and shipping_address and billing_address and total > 0:
+            return True
+        return False
+
+    def mark_paid(self):
+        if self.check_done():
+            self.status = "paid"
+            self.save()
+        return self.status
+
+
+
 # signal 처리되면 호출할 함수 정의.(order를 저장하기 전에 주문id를 만든다.)
 def pre_save_create_order_id(sender, instance, *args, **kwargs):
     print("this def runs when order is created at first befor save")
