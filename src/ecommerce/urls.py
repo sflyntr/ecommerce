@@ -38,6 +38,7 @@ from carts.views import cart_home
 
 from .views import home_page, about_page, contact_page
 from accounts.views import login_page, register_page, guest_register_view, guest_login_view
+from carts.views import cart_detail_api_view
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
 from billing.views import payment_method_view, payment_method_createview
 
@@ -57,6 +58,7 @@ urlpatterns = [
     url(r'^bootstrap/$', TemplateView.as_view(template_name='bootstrap/example.html')),
     url(r'^products/', include("products.urls", namespace='products')),
     url(r'^search/', include("search.urls", namespace='search')),
+    url(r'^api/cart/', cart_detail_api_view, name="cart-api"),
     url(r'^cart/', include("carts.urls", namespace='cart')),
     # url(r'^featured/$', ProductFeaturedListView.as_view()),
     # url(r'^featured/(?P<pk>\d+)/$', ProductFeaturedDetailView.as_view()),
