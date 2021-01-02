@@ -121,7 +121,7 @@ def checkout_home(request):
             del request.session['cart_id']
             # 이것을 넣지 않으니 checkout 끝나도 계속 남아있다.
             if request.session.get('guest_email_id', None):
-                del request.session['guest_email_id']   
+                del request.session['guest_email_id']
         return redirect("cart:success")
 
 
