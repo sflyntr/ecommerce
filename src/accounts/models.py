@@ -44,8 +44,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
 	email = models.EmailField(max_length=255, unique=True)
-	# full_name = models.CharField(max_length=255)
-	active = models.BooleanField(default=True) # can login
+	full_name = models.CharField(max_length=255, null=True, blank=True)
+	is_active = models.BooleanField(default=True) # can login
 	staff = models.BooleanField(default=False) # staff user, not superuser
 	admin = models.BooleanField(default=False) # superuser
 	timestamp = models.DateTimeField(auto_now_add=True)
@@ -73,10 +73,9 @@ class User(AbstractBaseUser):
 	def has_module_perms(self, app_lable):
 		return True
 
-
-	@property
-	def is_active(self):
-		return self.active
+	# @property
+	# def is_active(self):
+	# 	return self.active
 
 	@property
 	def is_staff(self):
@@ -85,7 +84,8 @@ class User(AbstractBaseUser):
 	@property
 	def is_admin(self):
 		return self.admin
-	
+
+
 
 
 class GuestEmail(models.Model):
