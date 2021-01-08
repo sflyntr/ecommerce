@@ -23,6 +23,8 @@ $(document).ready(function(){
 
       var contactFormData = contactForm.serialize();
       var thisForm = $(this);
+
+      // ajax call 전에 먼저 Sending으로 변경시킨다.
       displaySubmitting(contactFormSubmitBtn, "", true);
 
       $.ajax({
@@ -36,6 +38,7 @@ $(document).ready(function(){
                   content: data.message,
                   theme: "modern",
               });
+              // ajax call 결과 return 후 0.5c 있다가 원래대로 Submit 버튼을 원복시킨다.
               setTimeout(function(){
                   displaySubmitting(contactFormSubmitBtn, contactFormSubmitBtnTxt, false);
               }, 500);
