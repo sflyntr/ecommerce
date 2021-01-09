@@ -6,6 +6,8 @@ from django.views.generic.detail import DetailView
 from django.shortcuts import render, get_object_or_404
 
 from carts.models import Cart
+from analytics.signals import object_viewed_signal
+from analytics.mixins import ObjectViewedMixin
 
 from .models import Product
 
@@ -18,7 +20,7 @@ class ProductFeaturedListView(ListView):
         return Product.objects.all().featured()
 
 
-class ProductFeaturedDetailView(DetailView):
+class ProductFeaturedDetailView(ObjectViewedMixin, DetailView):
     # 아래와 같이 objects 하면 ModelManager가 나오고 all()을 하면 QuerySet이 나온다.
     # 그 QuerySet에는 featured 속성 없다고 나온다.
     # 즉, 우리는 ProductManager라는 Custome을 사용한 것 처럼
@@ -92,7 +94,7 @@ class ProductDetailView_queryset_override(DetailView):
         return Product.objects.filter(pk=pk)
 
 
-class ProductDetailSlugView(DetailView):
+class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all()
     template_name = "products/detail.html"
 
@@ -115,6 +117,14 @@ class ProductDetailSlugView(DetailView):
             instance = qs.first()
         except:
             raise Http404("Hummmmm.")
+
+        # Signal part
+        # instance.__class___ 는 sender와 같다. pre_save와 같은 방식임.
+        # 아래 처럼 하면 엄청난 redundant 생긴다. 따라서 class base view를 사용
+        # 거기에 mixin을 넣어서 해결한다.
+        # object_viewed_signal.send(instance.__class__,
+        #                           instance=instance,
+        #                           request=request)
 
         return instance
 
