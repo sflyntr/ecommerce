@@ -14,7 +14,7 @@ ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
     ('paid', 'Paid'),
     ('shipped', 'Shipped'),
-    ('refuned', 'Refuned'),
+    ('refunded', 'Refunded'),
 )
 
 

@@ -137,15 +137,25 @@ def checkout_home(request):
 
     if request.method == "POST":
         "some check that order is done"
-        is_done = order_obj.check_done()
-        if is_done:
-            order_obj.mark_paid()
-            request.session['cart_items'] = 0
-            del request.session['cart_id']
-            # 이것을 넣지 않으니 checkout 끝나도 계속 남아있다.
-            if request.session.get('guest_email_id', None):
-                del request.session['guest_email_id']
-        return redirect("cart:success")
+        is_prepared = order_obj.check_done()
+        if is_prepared:
+            did_charge, crg_msg = billing_profile.charge(order_obj)
+            if did_charge:
+                order_obj.mark_paid()
+                request.session['cart_items'] = 0
+                del request.session['cart_id']
+                if not billing_profile.user:
+                    '''
+                    is this the best spot?
+                    '''
+                    billing_profile.set_cards_inactive()
+                # 이것을 넣지 않으니 checkout 끝나도 계속 남아있다.
+                if request.session.get('guest_email_id', None):
+                    del request.session['guest_email_id']
+                return redirect("cart:success")
+            else:
+                print(crg_msg)
+                return redirect("cart:checkout")
 
 
     context = {
