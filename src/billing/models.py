@@ -30,28 +30,31 @@ class BillingProfileManager(models.Manager):
 
         return obj, created
 
+
 class BillingProfile(models.Model):
     user = models.OneToOneField(User, null=True, blank=True)
     email = models.EmailField()
     active = models.BooleanField(default=True)
     update = models.DateTimeField(auto_now_add=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    customer_id = models.CharField(max_length=120, null=True, blank=True)
     # customer_id in Stripe or Braintree
+    customer_id = models.CharField(max_length=120, null=True, blank=True)
 
     objects = BillingProfileManager()
 
     def __str__(self):
         return self.email
 
+
 def billing_profile_created_receiver(sender, instance, *args, **kwargs):
     if not instance.customer_id and instance.email:
         print("ACTUAL API REQUEST Send to stripe/Braintree")
         customer = stripe.Customer.create(
-                email = instance.email
+                email=instance.email
             )
         instance.customer_id = customer.id
         print(customer)
+
 
 pre_save.connect(billing_profile_created_receiver, sender=BillingProfile)
 
@@ -59,7 +62,6 @@ pre_save.connect(billing_profile_created_receiver, sender=BillingProfile)
 def user_created_receiver(sender, instance, created, *args, **kwargs):
     if created:
         BillingProfile.objects.get_or_create(user=instance, email=instance.email)
-
 
 
 post_save.connect(user_created_receiver, sender=User)
