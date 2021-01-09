@@ -10,13 +10,10 @@ $(document).ready(function(){
         publishKey: stripeModuleToken,
         nextUrl: stripeModuleNextUrl,
         btnTitle: stripeModuleBtnTitle
-
     }
     var stripeTemplateHtml = stripeTemplate.render(stripeTemplateDataContext)
     console.log(stripeTemplateHtml)
     stripeFormModule.html(stripeTemplateHtml)
-
-
 
     var paymentForm = $(".payment-form")
 
