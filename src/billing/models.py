@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save, pre_save
 
 from accounts.models import GuestEmail
@@ -7,9 +8,9 @@ from accounts.models import GuestEmail
 User = settings.AUTH_USER_MODEL
 
 import stripe
-STRIPE_SECRET_KEY = 'sk_test_51HputmGYYMq5YiSWSw3vJVfkEkMcmXlolnJ2deRBAcxlAlvPvDG1m6VZcE4hTQjA7senoikZ8L3UEu2FMBVjCkg100gmneW7aT'
+STRIPE_SECRET_KEY = getattr(settings, "STRIPE_SECRET_KEY")
+STRIPE_PUB_KEY = getattr(settings, "STRIPE_PUB_KEY")
 stripe.api_key = STRIPE_SECRET_KEY
-
 
 class BillingProfileManager(models.Manager):
     def new_or_get(self, request):
@@ -46,8 +47,30 @@ class BillingProfile(models.Model):
         return self.email
 
     def charge(self, order_obj, card=None):
-        print("charging.....")
         return Charge.objects.do(self, order_obj, card)
+
+    def get_cards(self):
+        return self.card_set.all() # Card.objects.filter(billing_profile=self, active=True)
+
+    def get_payment_method_url(self):
+        return reverse('billing-payment-method')
+
+    @property
+    def has_card(self): # instance.has_card
+        card_qs = self.get_cards()
+        return card_qs.exists()
+
+    @property
+    def default_card(self):
+        default_cards = self.get_cards().filter(active=True, default=True)
+        if default_cards.exists():
+            return default_cards.first()
+        return None
+
+    def set_cards_inactive(self):
+        cards_qs = self.get_cards()
+        cards_qs.update(active=False)
+        return cards_qs.filter(active=True).count()
 
 
 def billing_profile_created_receiver(sender, instance, *args, **kwargs):
@@ -113,11 +136,15 @@ class Card(models.Model):
 
 
 def new_card_post_save_receiver(sender, instance, created, *args, **kwargs):
+    # if created or instance.default: # create 될때 default 필드의 default값이 True임.
     if instance.default:
         billing_profile = instance.billing_profile
         # update default to false all other instances except input instance
         qs = Card.objects.filter(billing_profile=billing_profile).exclude(pk=instance.pk)
         qs.update(default=False)
+
+
+post_save.connect(new_card_post_save_receiver, sender=Card)
 
 
 class ChargeManager(models.Manager):
