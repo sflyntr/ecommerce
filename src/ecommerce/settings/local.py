@@ -15,8 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # 현재 settings.py 화일이 있는 위치의 dir 그리고 그 dir이 존재하는 dir이 BASE_DIR 이 된다.
 # 즉, src/ecommerce/settings.py 이므로, src 디렉토리가 BASE_DIR 이 된다.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -165,3 +164,13 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
+
+CORS_REPLACE_HTTPS_REFERER      = False
+HOST_SCHEME                     = "http://"
+SECURE_PROXY_SSL_HEADER         = None
+SECURE_SSL_REDIRECT             = False
+SESSION_COOKIE_SECURE           = False
+CSRF_COOKIE_SECURE              = False
+SECURE_HSTS_SECONDS             = None
+SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
+SECURE_FRAME_DENY               = False
